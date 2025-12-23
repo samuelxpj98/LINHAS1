@@ -25,8 +25,3 @@ export interface GameState {
   showFinalResult: boolean;
   currentPlayerIndex: number;
 }
-
-export interface TheologicalInsight {
-  word: string;
-  verse: string;
-}

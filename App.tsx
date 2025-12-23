@@ -1,8 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { CellStatus, GameState, Player, TheologicalInsight } from './types';
+import { CellStatus, GameState, Player } from './types';
 import { DB_THEOLOGY, DB_CONTEXT, RANKS } from './constants';
-import { getTheologicalInsight } from './services/geminiService';
 
 const CITY_NAMES = ["Jerusalém", "Judeia", "Samaria", "Mundo"];
 
@@ -23,8 +22,6 @@ const App: React.FC = () => {
   });
 
   const [activeCell, setActiveCell] = useState<{ coord: string; x: string; y: string } | null>(null);
-  const [insight, setInsight] = useState<TheologicalInsight | null>(null);
-  const [loadingInsight, setLoadingInsight] = useState(false);
   
   const timerRef = useRef<number | null>(null);
 
@@ -86,15 +83,6 @@ const App: React.FC = () => {
   const handleCellClick = (coord: string, x: string, y: string) => {
     if (!gameState.isGameActive || gameState.cellStatus[coord]) return;
     setActiveCell({ coord, x, y });
-    setInsight(null);
-  };
-
-  const fetchInsight = async () => {
-    if (!activeCell) return;
-    setLoadingInsight(true);
-    const result = await getTheologicalInsight(activeCell.x, activeCell.y);
-    setInsight(result);
-    setLoadingInsight(false);
   };
 
   const markResult = (status: CellStatus) => {
@@ -117,7 +105,6 @@ const App: React.FC = () => {
     }
 
     setActiveCell(null);
-    setInsight(null);
   };
 
   const calculateScore = () => {
@@ -358,29 +345,6 @@ const App: React.FC = () => {
               {activeCell.x} + {activeCell.y}
             </div>
 
-            <div className="mb-10 p-8 bg-[#f8fafc] rounded-[40px] min-h-[140px] flex flex-col items-center justify-center border border-[#f1f5f9]">
-              {loadingInsight ? (
-                <div className="animate-pulse flex flex-col items-center gap-4">
-                  <div className="w-14 h-14 rounded-full border-[6px] border-[#ffedd5] border-t-[#f58a27] animate-spin"></div>
-                  <span className="text-[#f58a27] text-xs font-black uppercase tracking-widest">Consultando Oráculo...</span>
-                </div>
-              ) : insight ? (
-                <div className="text-center animate-in fade-in zoom-in-95 duration-500 w-full">
-                  <p className="text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Conexão Sugerida</p>
-                  <p className="text-5xl font-black text-[#f58a27] mb-6 leading-none tracking-tight break-all drop-shadow-sm">{insight.word}</p>
-                  <div className="h-px w-12 bg-gray-100 mx-auto mb-6"></div>
-                  <p className="text-[10px] font-bold text-[#64748b] uppercase leading-relaxed tracking-wider bg-white p-3 rounded-2xl border border-gray-50">{insight.verse}</p>
-                </div>
-              ) : (
-                <button 
-                  onClick={fetchInsight}
-                  className="bg-white text-[#f58a27] text-[11px] font-black px-8 py-3.5 rounded-full shadow-md hover:shadow-lg transition-all uppercase tracking-[0.15em] border border-[#ffedd5]"
-                >
-                  ✨ Revelar Insight
-                </button>
-              )}
-            </div>
-
             <div className="grid grid-cols-2 gap-5 mb-6">
               <button 
                 onClick={() => markResult(CellStatus.CORRECT)}
@@ -398,7 +362,7 @@ const App: React.FC = () => {
               </button>
             </div>
             <button 
-              onClick={() => { setActiveCell(null); setInsight(null); }}
+              onClick={() => { setActiveCell(null); }}
               className="text-[#94a3b8] font-black py-2 text-[11px] uppercase tracking-[0.3em] hover:text-[#64748b] transition-colors"
             >
               Voltar
