@@ -23,6 +23,7 @@ export interface GameState {
   cellStatus: Record<string, CellStatus>;
   players: Player[];
   showFinalResult: boolean;
+  currentPlayerIndex: number;
 }
 
 export interface TheologicalInsight {
