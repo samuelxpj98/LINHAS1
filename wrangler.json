@@ -1,0 +1,7 @@
+{
+  "name": "linhas-conexoes-teologicas",
+  "compatibility_date": "2025-12-23",
+  "assets": {
+    "directory": "./dist"
+  }
+}
