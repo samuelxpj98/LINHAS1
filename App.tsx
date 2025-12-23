@@ -295,7 +295,6 @@ const App: React.FC = () => {
           {gameState.players.map((player, idx) => (
             <details 
               key={player.id} 
-              open={idx === gameState.currentPlayerIndex}
               className={`group bg-white border rounded-[24px] overflow-hidden shadow-sm transition-all ${idx === gameState.currentPlayerIndex ? 'border-[#f58a27] ring-1 ring-[#f58a27]' : 'border-[#f1f5f9]'}`}
             >
               <summary className="list-none flex justify-between items-center p-5 cursor-pointer select-none">
@@ -308,7 +307,10 @@ const App: React.FC = () => {
                     )}
                   </div>
                 </div>
-                <span className="text-[#f58a27] group-open:rotate-180 transition-transform text-xs">▼</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-black text-gray-300 uppercase hidden group-open:inline animate-pulse">Privado</span>
+                  <span className="text-[#f58a27] group-open:rotate-180 transition-transform text-xs">▼</span>
+                </div>
               </summary>
               <div className="p-5 flex flex-wrap gap-2.5 justify-center bg-[#f8fafc] border-t border-[#f1f5f9]">
                 {player.hand.map(coord => (
@@ -363,12 +365,11 @@ const App: React.FC = () => {
                   <span className="text-[#f58a27] text-xs font-black uppercase tracking-widest">Consultando Oráculo...</span>
                 </div>
               ) : insight ? (
-                <div className="text-left animate-in fade-in zoom-in-95 duration-500">
-                  <p className="text-sm font-bold text-[#334155] mb-5 leading-relaxed italic tracking-tight">"{insight.explanation}"</p>
-                  <div className="flex gap-4 items-start">
-                    <div className="w-1.5 h-10 bg-[#f58a27] rounded-full shrink-0"></div>
-                    <p className="text-[11px] font-black text-[#64748b] uppercase leading-relaxed tracking-wider">{insight.verse}</p>
-                  </div>
+                <div className="text-center animate-in fade-in zoom-in-95 duration-500 w-full">
+                  <p className="text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Conexão Sugerida</p>
+                  <p className="text-5xl font-black text-[#f58a27] mb-6 leading-none tracking-tight break-all drop-shadow-sm">{insight.word}</p>
+                  <div className="h-px w-12 bg-gray-100 mx-auto mb-6"></div>
+                  <p className="text-[10px] font-bold text-[#64748b] uppercase leading-relaxed tracking-wider bg-white p-3 rounded-2xl border border-gray-50">{insight.verse}</p>
                 </div>
               ) : (
                 <button 

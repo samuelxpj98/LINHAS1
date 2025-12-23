@@ -27,6 +27,6 @@ export interface GameState {
 }
 
 export interface TheologicalInsight {
-  explanation: string;
+  word: string;
   verse: string;
 }

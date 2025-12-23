@@ -1,35 +1,35 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
 
-export async function getTheologicalInsight(concept: string, context: string): Promise<{ explanation: string; verse: string }> {
+export async function getTheologicalInsight(concept: string, context: string): Promise<{ word: string; verse: string }> {
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
   
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
-      contents: `Explique brevemente a conexão teológica entre o conceito "${concept}" e o contexto "${context}". Forneça também um versículo bíblico relevante.`,
+      contents: `Dado o conceito teológico "${concept}" e o contexto bíblico "${context}", sugira EXATAMENTE UMA PALAVRA (em português) que sintetize a conexão entre eles. Forneça também um versículo bíblico curto que embase essa sugestão.`,
       config: {
         responseMimeType: "application/json",
         responseSchema: {
           type: Type.OBJECT,
           properties: {
-            explanation: { type: Type.STRING, description: 'Breve explicação teológica.' },
-            verse: { type: Type.STRING, description: 'Referência e texto de um versículo bíblico.' }
+            word: { type: Type.STRING, description: 'Exatamente uma única palavra que conecta o conceito e o contexto.' },
+            verse: { type: Type.STRING, description: 'Referência e texto de um versículo bíblico curto.' }
           },
-          required: ["explanation", "verse"]
+          required: ["word", "verse"]
         }
       }
     });
 
     const result = JSON.parse(response.text || "{}");
     return {
-      explanation: result.explanation || "Sem explicação disponível.",
+      word: result.word?.trim().toUpperCase() || "CONEXÃO",
       verse: result.verse || "Referência não encontrada."
     };
   } catch (error) {
     console.error("Error fetching Gemini insight:", error);
     return {
-      explanation: "Não foi possível carregar o insight teológico agora.",
+      word: "LUMEN",
       verse: "Tente novamente mais tarde."
     };
   }
