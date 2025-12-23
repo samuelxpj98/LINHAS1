@@ -15,6 +15,7 @@ export interface GameState {
   isGameActive: boolean;
   view: 'config' | 'game';
   seconds: number;
+  currentTurnSeconds: number; // Tempo restante no turno atual
   gridSize: number;
   playerCount: number;
   turnTime: number | 'inf';
